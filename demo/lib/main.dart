@@ -1,8 +1,17 @@
+import 'package:demo/provider/admin_side_bar_provider.dart';
 import 'package:demo/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AdminSideBarProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,7 +19,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('loading Page');
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(

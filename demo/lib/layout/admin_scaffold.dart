@@ -1,6 +1,10 @@
+import 'package:demo/constants/menu_keys.dart';
+import 'package:demo/constants/menu_tabs.dart';
+import 'package:demo/helper/helper.dart';
+import 'package:demo/provider/admin_side_bar_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class AdminScaffold extends StatefulWidget {
   final Widget child;
@@ -13,83 +17,64 @@ class AdminScaffold extends StatefulWidget {
 
 class _AdminScaffoldState extends State<AdminScaffold> {
   String selectedMenu = '';
-  int selectedIndex = 0;
 
-  final tabs = [
-    {
-      'icon': Icons.shopping_cart,
-      'label': 'Staff',
-      'path': '/staff',
-    },
-    {
-      'icon': Icons.inventory,
-      'label': 'Customer',
-      'path': '/customer',
-      'submenu': [
-        {'label': 'All Customer', 'path': '/allCustomers'},
-        {'label': 'New Customer', 'path': '/newCustomer'}
-      ],
-    },
-  ];
+  final tabs = adminTabs;
 
-  void _selectedMenu(String value) {
-    debugPrint('menu : $value');
-    setState(() {
-      selectedMenu = value;
-    });
+  void _selectMainMenu(int index) {
+    final selectedLabel = Helper.getMainMenuLabel(index);
+    final selectedPath = Helper.getMenuDefaultSubMenuPath(index);
+
+    context.read<AdminSideBarProvider>()
+      ..updateMenu(selectedLabel, index)
+      ..updateSubMenu(selectedPath)
+      ..refresh();
+
+    context.go(selectedPath);
   }
 
-  void _selectedIndex(int value) {
-    debugPrint('value : $value');
-    setState(() {
-      selectedIndex = value;
-    });
+  void _selectSubMenu(String path) {
+    context.read<AdminSideBarProvider>()
+      ..updateSubMenu(path)
+      ..refresh();
+
+    context.go(path);
   }
 
   @override
   Widget build(BuildContext context) {
-    final location = GoRouterState.of(context).uri.path;
-
-    // int selectedIndex = switch (true) {
-    //   _ when location.startsWith('/newCustomer') => 1,
-    //   _ => 0,
-    // };
-
     return Scaffold(
       body: Row(
         children: [
           Container(
             width: 200,
             color: const Color(0xFFF8F8FC),
-            child: ListView.builder(
-              itemCount: tabs.length,
-              itemBuilder: (context, index) {
-                final tab = tabs[index];
-                final isSelected = selectedIndex == index;
-                debugPrint('selectedIndex : $selectedIndex ');
-                debugPrint('isSelected : $isSelected ');
+            child: Selector<AdminSideBarProvider, int>(
+              selector: (p0, p1) => p1.selectedIndex,
+              builder: (_, selectedIndex, __) => ListView.builder(
+                itemCount: tabs.length,
+                itemBuilder: (context, index) {
+                  final tab = tabs[index];
+                  final isSelected = selectedIndex == index;
 
-                return InkWell(
-                  onTap: () {
-                    _selectedMenu(tab['label'] as String);
-                    _selectedIndex(index);
-                  },
-                  // onTap: () => context.go(tab['path'] as String),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 12),
-                    color: isSelected
-                        ? const Color(0xFFEAE6F8)
-                        : Colors.transparent,
-                    child: Column(
-                      children: [
-                        _buildMainTab(tab, isSelected),
-                        if (isSelected) _buildSubMenu(),
-                      ],
+                  return InkWell(
+                    onTap: () => _selectMainMenu(index),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 12),
+                      color: isSelected
+                          ? const Color(0xFFEAE6F8)
+                          : Colors.transparent,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildMainTab(tab, isSelected),
+                          if (isSelected) _buildSubMenu(selectedIndex),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
           const VerticalDivider(width: 1),
@@ -99,38 +84,52 @@ class _AdminScaffoldState extends State<AdminScaffold> {
     );
   }
 
-  Widget _buildSubMenu() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: Text(
-            'All Customers',
-            textAlign: TextAlign.start,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: Text(
-            'New Customer',
-            textAlign: TextAlign.start,
-          ),
-        ),
-      ],
+  Widget _buildSubMenu(int selectedIndex) {
+    final submenu = tabs[selectedIndex][MenuKeys.submenu] as List<dynamic>;
+
+    return Selector<AdminSideBarProvider, String>(
+      selector: (p0, p1) => p1.selectedSubMenu,
+      builder: (_, selectedSubMenu, __) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: submenu.map(
+            (menu) {
+              if (Helper.isEmpty(selectedSubMenu)) {
+                selectedSubMenu = submenu[0][MenuKeys.path] as String;
+              }
+
+              final label = menu[MenuKeys.label] as String;
+              final path = menu[MenuKeys.path] as String;
+              final isSelected = selectedSubMenu == path;
+
+              return InkWell(
+                onTap: () => _selectSubMenu(path),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 12, bottom: 12, left: 40),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      color: isSelected ? Colors.deepPurple : Colors.black,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ).toList()),
     );
   }
 
-  Widget _buildMainTab(Map<String, Object> tab, bool isSelected) {
+  Widget _buildMainTab(Map<String, dynamic> tab, bool isSelected) {
     return Row(
       children: [
         Icon(
-          tab['icon'] as IconData,
+          tab[MenuKeys.icon] as IconData,
           color: isSelected ? Colors.deepPurple : Colors.black,
         ),
         const SizedBox(width: 12),
         Text(
-          tab['label']! as String,
+          tab[MenuKeys.label]! as String,
           style: TextStyle(
             color: isSelected ? Colors.deepPurple : Colors.black,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

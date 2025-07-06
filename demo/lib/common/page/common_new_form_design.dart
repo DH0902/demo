@@ -2,14 +2,21 @@ import 'package:demo/extensions/context_extension.dart';
 import 'package:demo/pages/widgets/form.dart';
 import 'package:flutter/material.dart';
 
-class CustomerView extends StatefulWidget {
-  const CustomerView({super.key});
+class CommonNewFormDesign extends StatefulWidget {
+  final String title;
+  final String id;
+
+  const CommonNewFormDesign({
+    super.key,
+    required this.title,
+    required this.id,
+  });
 
   @override
-  State<CustomerView> createState() => _CustomerViewState();
+  State<CommonNewFormDesign> createState() => _CommonNewFormDesignState();
 }
 
-class _CustomerViewState extends State<CustomerView> {
+class _CommonNewFormDesignState extends State<CommonNewFormDesign> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,11 +34,11 @@ class _CustomerViewState extends State<CustomerView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Customer Profile Form',
+              'New ${widget.title} Profile Form',
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
             ),
             const SizedBox(height: 20),
-            CommonForm(id: 'CUST#1234'),
+            CommonForm(id: widget.id),
           ],
         ),
       ),
