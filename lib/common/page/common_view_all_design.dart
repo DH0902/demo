@@ -44,13 +44,25 @@ class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
                   widget.pageTitle,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (widget.createNewFunction == null) return;
-                      widget.createNewFunction!();
-                    },
-                    child: Text(
-                        'Create ${widget.pageTitle.substring(0, widget.pageTitle.length - 1)}'))
+                Row(
+                  children: [
+                    ElevatedButton(onPressed: () {}, child: Text('Export')),
+                    const SizedBox(width: 20),
+                    ElevatedButton(onPressed: () {}, child: Text('Import')),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          if (widget.createNewFunction == null) return;
+                          widget.createNewFunction!();
+                        },
+                        child: Text(
+                            'Create ${widget.pageTitle.substring(0, widget.pageTitle.length - 1)}')),
+                  ],
+                )
               ],
             ),
             if (widget.child != null) widget.child!

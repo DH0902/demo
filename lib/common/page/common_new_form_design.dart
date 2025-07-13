@@ -1,5 +1,6 @@
-import 'package:demo/extensions/context_extension.dart';
-import 'package:demo/pages/widgets/form.dart';
+import 'package:demo/common/common_new_form_address.dart';
+import 'package:demo/common/page/common_new_form_name.dart';
+import 'package:demo/common/page/common_staff_selection.dart';
 import 'package:flutter/material.dart';
 
 class CommonNewFormDesign extends StatefulWidget {
@@ -20,27 +21,40 @@ class _CommonNewFormDesignState extends State<CommonNewFormDesign> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(width: 1, color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        height: context.screenHeight * 0.6,
-        width: context.screenWidth * 0.6,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'New ${widget.title} Profile Form',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+      padding: const EdgeInsets.only(top: 40, left: 40, right: 40, bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.person_outline),
+              Icon(Icons.navigate_next_rounded),
+              Text('New ${widget.title}')
+            ],
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CommonNewFormName(title: widget.title, id: widget.id),
+                  const SizedBox(height: 20),
+                  CommonNewFormAddress(),
+                  if (widget.title == 'Customer') ...{
+                    const SizedBox(height: 20),
+                    CommonStaffSelection(),
+                  }
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-            CommonForm(id: widget.id),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(onPressed: () {}, child: Text('Save')),
+          ),
+        ],
       ),
     );
   }

@@ -10,6 +10,23 @@ class CommonForm extends StatefulWidget {
 }
 
 class _CommonFormState extends State<CommonForm> {
+  bool checkBox1 = false;
+  bool checkBox2 = false;
+
+  void _onToggleCheckBox1(bool? value) {
+    if (value == null) return;
+    setState(() {
+      checkBox1 = value;
+    });
+  }
+
+  void _onToggleCheckBox2(bool? value) {
+    if (value == null) return;
+    setState(() {
+      checkBox2 = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,13 +43,13 @@ class _CommonFormState extends State<CommonForm> {
           children: [
             Expanded(
               child: LabeldFormField(
-                label: 'Name',
+                label: 'First Name',
               ),
             ),
             const SizedBox(width: 20),
             Expanded(
               child: LabeldFormField(
-                label: 'Phone',
+                label: 'Last Name',
               ),
             ),
           ],
@@ -40,20 +57,25 @@ class _CommonFormState extends State<CommonForm> {
         const SizedBox(height: 20),
         LabeldFormField(label: 'Email'),
         const SizedBox(height: 20),
+        LabeldFormField(label: 'Phone'),
+        const SizedBox(height: 20),
         LabeldFormField(label: 'IC Number'),
         const SizedBox(height: 20),
-        LabeldFormField(label: 'Address'),
-        const SizedBox(height: 40),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            SizedBox(
-              height: 30,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Save'),
-              ),
-            ),
+            Checkbox(
+                value: checkBox1,
+                onChanged: (value) => _onToggleCheckBox1(value)),
+            Text('Customer agreed to receive marketing emails.'),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Checkbox(
+                value: checkBox2,
+                onChanged: (value) => _onToggleCheckBox2(value)),
+            Text('Customer agreed to receive marketing text messages.'),
           ],
         ),
       ],
@@ -124,8 +146,8 @@ class FormTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 1),
-        ),
+            borderSide: BorderSide(color: Colors.grey, width: 1),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 12.0,
           horizontal: 10.0,
