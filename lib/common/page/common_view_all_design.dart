@@ -1,4 +1,5 @@
 import 'package:demo/extensions/context_extension.dart';
+import 'package:demo/helper/file_helper.dart';
 import 'package:flutter/material.dart';
 
 class CommonViewAllDesign extends StatefulWidget {
@@ -43,7 +44,11 @@ class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
                 children: [
                   ElevatedButton(onPressed: () {}, child: Text('Export')),
                   const SizedBox(width: 20),
-                  ElevatedButton(onPressed: () {}, child: Text('Import')),
+                  ElevatedButton(
+                      onPressed: () {
+                        FileHelper.showImportDialog(context, widget.pageTitle);
+                      },
+                      child: Text('Import')),
                   const SizedBox(width: 20),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
