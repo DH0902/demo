@@ -132,12 +132,16 @@ class _AllCustomerViewState extends State<AllCustomersView> {
             controller: _searchController,
             decoration: InputDecoration(
               hintText: "Search customers",
-              prefixIcon: Icon(Icons.search),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              contentPadding: EdgeInsets.symmetric(vertical: 12),
+              // isDense: true,
+              prefixIcon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(Icons.search),
+              ),
+              // border:
+              //     OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             ),
           ),
-          const SizedBox(height: 20),
           SizedBox(
             width: context.screenWidth,
             child: _viewAllCustomers(),

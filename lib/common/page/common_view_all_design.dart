@@ -71,7 +71,7 @@ class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                    // padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(width: 1, color: Colors.grey.shade300),
