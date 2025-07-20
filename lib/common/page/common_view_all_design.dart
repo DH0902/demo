@@ -1,6 +1,7 @@
 import 'package:demo/extensions/context_extension.dart';
 import 'package:demo/helper/file_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CommonViewAllDesign extends StatefulWidget {
   final double? height;
@@ -23,6 +24,13 @@ class CommonViewAllDesign extends StatefulWidget {
 }
 
 class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
+  Widget getIcons() {
+    final imgPath = widget.pageTitle == 'Staffs'
+        ? 'assets/icons/employee_icon.svg'
+        : 'assets/icons/customer_icon.svg';
+    return SvgPicture.asset(imgPath, width: 16, height: 16);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,7 +43,7 @@ class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
             children: [
               Row(
                 children: [
-                  Icon(Icons.person_outline),
+                  getIcons(),
                   const SizedBox(width: 10),
                   Text(widget.pageTitle)
                 ],

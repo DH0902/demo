@@ -122,8 +122,8 @@ class _AllCustomerViewState extends State<AllCustomersView> {
           cells: [
             DataCell(Text(e.name)),
             DataCell(Text(e.subscription)),
-            DataCell(Text(e.location)),
             DataCell(Text('${e.orders}')),
+            DataCell(Text(e.location)),
             DataCell(Text('${e.amount}')),
             DataCell(
               TextButton(

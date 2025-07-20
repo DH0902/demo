@@ -1,7 +1,9 @@
 import 'package:demo/layout/admin_scaffold.dart';
+import 'package:demo/pages/bank/all_bank_view.dart';
 import 'package:demo/pages/customer/all_customer_view.dart';
 import 'package:demo/pages/customer/customer_record.dart';
 import 'package:demo/pages/customer/new_customer_form.dart';
+import 'package:demo/pages/loan/all_loan_view.dart';
 import 'package:demo/pages/staff/all_staff_view.dart';
 import 'package:demo/pages/staff/new_staff_form.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,28 @@ class MyRouterConfig {
               GoRoute(
                 path: 'viewCustomerRecord',
                 builder: (context, state) => CustomerRecord(),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/bank',
+            name: 'bank',
+            builder: (context, state) => const SizedBox.shrink(),
+            routes: [
+              GoRoute(
+                path: 'allBank',
+                builder: (context, state) => AllBankView(),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/loan',
+            name: 'loan',
+            builder: (context, state) => const SizedBox.shrink(),
+            routes: [
+              GoRoute(
+                path: 'allLoan',
+                builder: (context, state) => AllLoanView(),
               ),
             ],
           ),

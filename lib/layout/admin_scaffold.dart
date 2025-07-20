@@ -3,6 +3,7 @@ import 'package:demo/constants/menu_tabs.dart';
 import 'package:demo/helper/helper.dart';
 import 'package:demo/provider/admin_side_bar_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -176,11 +177,19 @@ class _AdminScaffoldState extends State<AdminScaffold> {
   Widget _buildMainTab(Map<String, dynamic> tab, bool isSelected) {
     return Row(
       children: [
-        Icon(
-          tab[MenuKeys.icon] as IconData,
-          color: Colors.black,
-          size: 20,
-        ),
+        if (!Helper.isEmpty(tab[MenuKeys.icon])) ...{
+          Icon(
+            tab[MenuKeys.icon] as IconData,
+            color: Colors.black,
+            size: 20,
+          ),
+        } else ...{
+          SvgPicture.asset(
+            tab[MenuKeys.svgIcon],
+            width: 16,
+            height: 16,
+          ),
+        },
         const SizedBox(width: 12),
         Text(
           tab[MenuKeys.label]! as String,

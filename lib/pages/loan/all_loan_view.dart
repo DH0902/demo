@@ -1,92 +1,83 @@
-import 'package:demo/common/page/common_tab_content_design.dart';
 import 'package:demo/common/page/common_table.dart';
 import 'package:demo/common/page/common_view_all_design.dart';
 import 'package:demo/extensions/context_extension.dart';
-import 'package:demo/pages/staff/all_staff_tab.dart';
 import 'package:demo/provider/admin_side_bar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AllStaffsView extends StatefulWidget {
-  const AllStaffsView({super.key});
+class AllLoanView extends StatefulWidget {
+  const AllLoanView({super.key});
 
   @override
-  State<AllStaffsView> createState() => _AllStaffViewState();
+  State<AllLoanView> createState() => _AllLoanViewState();
 }
 
-class _AllStaffViewState extends State<AllStaffsView> {
+class _AllLoanViewState extends State<AllLoanView> {
   final TextEditingController _searchController = TextEditingController();
 
-  List<Staff> filteredCustomer = [];
+  List<Customer> filteredCustomer = [];
 
   final columnLabels = [
-    'Customer name',
-    'Email Subscription',
+    'Loan ID',
     'Orders',
     'Location',
-    'Amount spent'
+    'Amount spent',
   ];
 
   final contentRows = [
-    Staff(
+    Customer(
       name: 'Joker',
       subscription: 'Not subscribed',
       location: 'Malaysia',
       orders: 10,
       amount: 1000.00,
+      id: 'L101',
     ),
-    Staff(
+    Customer(
       name: 'Ferlix',
       subscription: 'Subscribed',
       location: 'Malaysia',
       orders: 10,
       amount: 10000.00,
+      id: 'L102',
     ),
-    Staff(
+    Customer(
       name: 'Bird',
       subscription: 'Subscribed',
       location: 'Hong Kong',
       orders: 20,
       amount: 1000.00,
+      id: 'L103',
     ),
-    Staff(
+    Customer(
       name: 'Aoi',
       subscription: 'Not subscribed',
       location: 'Japan',
       orders: 20,
       amount: 1000.00,
+      id: 'L104',
     ),
   ];
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     filteredCustomer = contentRows;
-    _searchController.addListener(_filterStaffs);
+    _searchController.addListener(_filterCustomers);
   }
 
-  Widget _viewAllStaffs() {
-    final columns =
-        columnLabels.map((label) => DataColumn(label: Text(label))).toList();
-    final rows = filteredCustomer.map((e) {
-      return DataRow(cells: [
-        DataCell(Text(e.name)),
-        DataCell(Text(e.subscription)),
-        DataCell(Text('${e.orders}')),
-        DataCell(Text(e.location)),
-        DataCell(Text('${e.amount}')),
-      ]);
-    }).toList();
-
-    return CommonTable(columns: columns, rows: rows);
+  void _handleCreateNewCustomer() {
+    context.read<AdminSideBarProvider>().updateSubMenu('/customer/newCustomer');
+    context.routeTo('Customer', 'New Customer');
   }
 
-  void _handleCreateNewStaff() {
-    context.read<AdminSideBarProvider>().updateSubMenu('/staff/newStaff');
-    context.routeTo('Staff', 'New Staff');
-  }
-
-  void _filterStaffs() {
+  void _filterCustomers() {
     final query = _searchController.text.toLowerCase();
     if (query.isEmpty) {
       setState(() {
@@ -95,7 +86,7 @@ class _AllStaffViewState extends State<AllStaffsView> {
       return;
     }
 
-    List<Staff> selectedCustomer = [];
+    List<Customer> selectedCustomer = [];
     final parsedQuery = int.tryParse(query);
     if (parsedQuery != null) {
       selectedCustomer = filteredCustomer
@@ -115,30 +106,51 @@ class _AllStaffViewState extends State<AllStaffsView> {
     });
   }
 
+  Widget _viewAllCustomers() {
+    final columns =
+        columnLabels.map((label) => DataColumn(label: Text(label))).toList();
+    final rows = filteredCustomer.map((e) {
+      return DataRow(
+          color: WidgetStateColor.resolveWith((_) {
+            return const Color(0xFFF7F7F7);
+          }),
+          cells: [
+            DataCell(Text(e.id)),
+            DataCell(Text('${e.orders}')),
+            DataCell(Text(e.location)),
+            DataCell(Text('${e.amount}')),
+          ]);
+    }).toList();
+
+    return CommonTable(columns: columns, rows: rows);
+  }
+
   @override
   Widget build(BuildContext context) {
     return CommonViewAllDesign(
-      createNewFunction: () => _handleCreateNewStaff(),
-      pageTitle: 'Staffs',
+      createNewFunction: () => _handleCreateNewCustomer(),
+      pageTitle: 'Loans',
       child: Column(
         children: [
           TextField(
             controller: _searchController,
             decoration: InputDecoration(
-              hintText: "Search Staffs",
+              hintText: "Search loans",
               contentPadding: EdgeInsets.symmetric(vertical: 12),
               // isDense: true,
               prefixIcon: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Icon(Icons.search),
               ),
-              // border:
-              //     OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(Icons.sort),
+              ),
             ),
           ),
           SizedBox(
             width: context.screenWidth,
-            child: _viewAllStaffs(),
+            child: _viewAllCustomers(),
           ),
         ],
       ),
@@ -146,18 +158,20 @@ class _AllStaffViewState extends State<AllStaffsView> {
   }
 }
 
-class Staff {
+class Customer {
   final String name;
   final String subscription;
   final String location;
   final int orders;
   final double amount;
+  final String id;
 
-  const Staff({
+  const Customer({
     required this.name,
     required this.subscription,
     required this.location,
     required this.orders,
     required this.amount,
+    required this.id,
   });
 }
