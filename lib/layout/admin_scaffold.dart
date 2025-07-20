@@ -47,7 +47,7 @@ class _AdminScaffoldState extends State<AdminScaffold> {
         children: [
           Container(
             width: 200,
-            color: const Color(0xFFF8F8FC),
+            color: const Color(0xFFEBEBEB),
             child: Selector<AdminSideBarProvider, int>(
               selector: (p0, p1) => p1.selectedIndex,
               builder: (_, selectedIndex, __) => ListView.builder(
@@ -61,9 +61,7 @@ class _AdminScaffoldState extends State<AdminScaffold> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 16, horizontal: 12),
-                      color: isSelected
-                          ? const Color(0xFFEAE6F8)
-                          : Colors.transparent,
+                      color: Colors.transparent,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -78,7 +76,9 @@ class _AdminScaffoldState extends State<AdminScaffold> {
             ),
           ),
           const VerticalDivider(width: 1),
-          Expanded(child: widget.child),
+          Expanded(
+            child: Container(color: Color(0xFFF1F1F1), child: widget.child),
+          ),
         ],
       ),
     );
@@ -108,7 +108,7 @@ class _AdminScaffoldState extends State<AdminScaffold> {
                   child: Text(
                     label,
                     style: TextStyle(
-                      color: isSelected ? Colors.deepPurple : Colors.black,
+                      color: Colors.black,
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
@@ -125,13 +125,13 @@ class _AdminScaffoldState extends State<AdminScaffold> {
       children: [
         Icon(
           tab[MenuKeys.icon] as IconData,
-          color: isSelected ? Colors.deepPurple : Colors.black,
+          color: Colors.black,
         ),
         const SizedBox(width: 12),
         Text(
           tab[MenuKeys.label]! as String,
           style: TextStyle(
-            color: isSelected ? Colors.deepPurple : Colors.black,
+            color: Colors.black,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

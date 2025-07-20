@@ -42,9 +42,20 @@ class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
               ),
               Row(
                 children: [
-                  ElevatedButton(onPressed: () {}, child: Text('Export')),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    )),
+                    child: Text('Export'),
+                  ),
                   const SizedBox(width: 20),
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
                       onPressed: () {
                         FileHelper.showImportDialog(context, widget.pageTitle);
                       },
@@ -52,6 +63,9 @@ class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
                   const SizedBox(width: 20),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,
                       ),

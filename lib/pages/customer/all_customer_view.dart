@@ -5,6 +5,7 @@ import 'package:demo/extensions/context_extension.dart';
 import 'package:demo/pages/staff/all_staff_tab.dart';
 import 'package:demo/provider/admin_side_bar_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AllCustomersView extends StatefulWidget {
@@ -24,7 +25,8 @@ class _AllCustomerViewState extends State<AllCustomersView> {
     'Email Subscription',
     'Orders',
     'Location',
-    'Amount spent'
+    'Amount spent',
+    'Action',
   ];
 
   final contentRows = [
@@ -105,17 +107,31 @@ class _AllCustomerViewState extends State<AllCustomersView> {
     });
   }
 
+  void _showRecord() {
+    context.go('/customer/viewCustomerRecord');
+  }
+
   Widget _viewAllCustomers() {
     final columns =
         columnLabels.map((label) => DataColumn(label: Text(label))).toList();
     final rows = filteredCustomer.map((e) {
-      return DataRow(cells: [
-        DataCell(Text(e.name)),
-        DataCell(Text(e.subscription)),
-        DataCell(Text(e.location)),
-        DataCell(Text('${e.orders}')),
-        DataCell(Text('${e.amount}')),
-      ]);
+      return DataRow(
+          color: WidgetStateColor.resolveWith((_) {
+            return const Color(0xFFF7F7F7);
+          }),
+          cells: [
+            DataCell(Text(e.name)),
+            DataCell(Text(e.subscription)),
+            DataCell(Text(e.location)),
+            DataCell(Text('${e.orders}')),
+            DataCell(Text('${e.amount}')),
+            DataCell(
+              TextButton(
+                onPressed: _showRecord,
+                child: Text('View Details'),
+              ),
+            )
+          ]);
     }).toList();
 
     return CommonTable(columns: columns, rows: rows);
@@ -138,8 +154,10 @@ class _AllCustomerViewState extends State<AllCustomersView> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Icon(Icons.search),
               ),
-              // border:
-              //     OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(Icons.sort),
+              ),
             ),
           ),
           SizedBox(

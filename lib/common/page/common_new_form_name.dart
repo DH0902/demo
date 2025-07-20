@@ -5,7 +5,16 @@ import 'package:flutter/material.dart';
 class CommonNewFormName extends StatefulWidget {
   final String title;
   final String id;
-  const CommonNewFormName({super.key, required this.title, required this.id});
+  final dynamic data;
+  final bool isEditable;
+
+  const CommonNewFormName({
+    super.key,
+    required this.title,
+    required this.id,
+    this.data,
+    this.isEditable = true,
+  });
 
   @override
   State<CommonNewFormName> createState() => _CommonNewFormNameState();
@@ -24,12 +33,19 @@ class _CommonNewFormNameState extends State<CommonNewFormName> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildPaddedWidget(Text(
-            '${widget.title} Overview',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-          )),
+          _buildPaddedWidget(
+            Text(
+              '${widget.title} Overview',
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+            ),
+          ),
           const SizedBox(height: 20),
-          _buildPaddedWidget(CommonForm(id: widget.id)),
+          _buildPaddedWidget(
+            CommonForm(
+              id: widget.id,
+              isEditable: widget.isEditable,
+            ),
+          ),
           const SizedBox(height: 20),
           Container(
             decoration: BoxDecoration(

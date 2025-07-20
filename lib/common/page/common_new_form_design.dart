@@ -6,11 +6,15 @@ import 'package:flutter/material.dart';
 class CommonNewFormDesign extends StatefulWidget {
   final String title;
   final String id;
+  final bool isEditable;
+  final dynamic data;
 
   const CommonNewFormDesign({
     super.key,
     required this.title,
     required this.id,
+    this.isEditable = true,
+    this.data,
   });
 
   @override
@@ -38,7 +42,12 @@ class _CommonNewFormDesignState extends State<CommonNewFormDesign> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommonNewFormName(title: widget.title, id: widget.id),
+                  CommonNewFormName(
+                    title: widget.title,
+                    id: widget.id,
+                    data: widget.data,
+                    isEditable: widget.isEditable,
+                  ),
                   const SizedBox(height: 20),
                   CommonNewFormAddress(),
                   if (widget.title == 'Customer') ...{

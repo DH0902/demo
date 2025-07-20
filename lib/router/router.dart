@@ -1,5 +1,6 @@
 import 'package:demo/layout/admin_scaffold.dart';
 import 'package:demo/pages/customer/all_customer_view.dart';
+import 'package:demo/pages/customer/customer_record.dart';
 import 'package:demo/pages/customer/new_customer_form.dart';
 import 'package:demo/pages/staff/all_staff_view.dart';
 import 'package:demo/pages/staff/new_staff_form.dart';
@@ -43,6 +44,10 @@ class MyRouterConfig {
               GoRoute(
                 path: 'newCustomer',
                 builder: (context, state) => NewCustomerForm(),
+              ),
+              GoRoute(
+                path: 'viewCustomerRecord',
+                builder: (context, state) => CustomerRecord(),
               ),
             ],
           ),

@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 
 class CommonForm extends StatefulWidget {
   final String id;
+  final bool isEditable;
+  final dynamic data;
 
-  const CommonForm({super.key, required this.id});
+  const CommonForm({
+    super.key,
+    required this.id,
+    this.data,
+    this.isEditable = true,
+  });
 
   @override
   State<CommonForm> createState() => _CommonFormState();
@@ -43,23 +50,34 @@ class _CommonFormState extends State<CommonForm> {
           children: [
             Expanded(
               child: LabeldFormField(
+                enabled: widget.isEditable,
                 label: 'First Name',
               ),
             ),
             const SizedBox(width: 20),
             Expanded(
               child: LabeldFormField(
+                enabled: widget.isEditable,
                 label: 'Last Name',
               ),
             ),
           ],
         ),
         const SizedBox(height: 20),
-        LabeldFormField(label: 'Email'),
+        LabeldFormField(
+          label: 'Email',
+          enabled: widget.isEditable,
+        ),
         const SizedBox(height: 20),
-        LabeldFormField(label: 'Phone'),
+        LabeldFormField(
+          label: 'Phone',
+          enabled: widget.isEditable,
+        ),
         const SizedBox(height: 20),
-        LabeldFormField(label: 'IC Number'),
+        LabeldFormField(
+          label: 'IC Number',
+          enabled: widget.isEditable,
+        ),
         const SizedBox(height: 20),
         Row(
           children: [
