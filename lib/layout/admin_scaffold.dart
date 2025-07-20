@@ -17,7 +17,8 @@ class AdminScaffold extends StatefulWidget {
 
 class _AdminScaffoldState extends State<AdminScaffold> {
   String selectedMenu = '';
-
+  Set<int> _hoveredIndexes = {};
+  String? _hoveredSubMenuPath;
   final tabs = adminTabs;
 
   void _selectMainMenu(int index) {
@@ -55,21 +56,46 @@ class _AdminScaffoldState extends State<AdminScaffold> {
                 itemBuilder: (context, index) {
                   final tab = tabs[index];
                   final isSelected = selectedIndex == index;
+                  final isHovered = _hoveredIndexes.contains(index);
 
-                  return InkWell(
-                    onTap: () => _selectMainMenu(index),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 12),
-                      color: Colors.transparent,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildMainTab(tab, isSelected),
-                          if (isSelected) _buildSubMenu(selectedIndex),
-                        ],
+                  return Column(
+                    children: [
+                      MouseRegion(
+                        onEnter: (_) =>
+                            setState(() => _hoveredIndexes.add(index)),
+                        onExit: (_) =>
+                            setState(() => _hoveredIndexes.remove(index)),
+                        child: InkWell(
+                          onTap: () => _selectMainMenu(index),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            color: Colors.transparent,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.only(
+                                      top: 10,
+                                      bottom: 10,
+                                      left: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isHovered &&
+                                              Helper.isEmpty(
+                                                  _hoveredSubMenuPath)
+                                          ? const Color(0xFFE0E0E0)
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: _buildMainTab(tab, isSelected)),
+                                if (isSelected) _buildSubMenu(selectedIndex),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   );
                 },
               ),
@@ -89,34 +115,61 @@ class _AdminScaffoldState extends State<AdminScaffold> {
 
     return Selector<AdminSideBarProvider, String>(
       selector: (p0, p1) => p1.selectedSubMenu,
-      builder: (_, selectedSubMenu, __) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: submenu.map(
-            (menu) {
-              if (Helper.isEmpty(selectedSubMenu)) {
-                selectedSubMenu = submenu[0][MenuKeys.path] as String;
-              }
+      builder: (_, selectedSubMenu, __) => SizedBox(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: submenu.map(
+              (menu) {
+                if (Helper.isEmpty(selectedSubMenu)) {
+                  selectedSubMenu = submenu[0][MenuKeys.path] as String;
+                }
 
-              final label = menu[MenuKeys.label] as String;
-              final path = menu[MenuKeys.path] as String;
-              final isSelected = selectedSubMenu == path;
+                final label = menu[MenuKeys.label] as String;
+                final path = menu[MenuKeys.path] as String;
+                final isSelected = selectedSubMenu == path;
+                final isHovered = _hoveredSubMenuPath == path;
 
-              return InkWell(
-                onTap: () => _selectSubMenu(path),
-                child: Container(
-                  padding: const EdgeInsets.only(top: 12, bottom: 12, left: 40),
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
+                return MouseRegion(
+                  onEnter: (_) => setState(() => _hoveredSubMenuPath = path),
+                  onExit: (_) => setState(() => _hoveredSubMenuPath = null),
+                  child: InkWell(
+                    onTap: () => _selectSubMenu(path),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Colors.white
+                            : isHovered
+                                ? const Color(0xFFDADADA)
+                                : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding:
+                          const EdgeInsets.only(top: 10, bottom: 10, left: 12),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.subdirectory_arrow_right,
+                            color: Colors.black54,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            label,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ).toList()),
+                );
+              },
+            ).toList()),
+      ),
     );
   }
 
@@ -126,6 +179,7 @@ class _AdminScaffoldState extends State<AdminScaffold> {
         Icon(
           tab[MenuKeys.icon] as IconData,
           color: Colors.black,
+          size: 20,
         ),
         const SizedBox(width: 12),
         Text(
