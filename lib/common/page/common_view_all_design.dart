@@ -82,7 +82,7 @@ class _CommonViewAllDesignState extends State<CommonViewAllDesign> {
                         widget.createNewFunction!();
                       },
                       child: Text(
-                          'Create ${widget.pageTitle.substring(0, widget.pageTitle.length - 1)}')),
+                          'Create ${widget.pageTitle.endsWith('s') ? widget.pageTitle.substring(0, widget.pageTitle.length - 1) : widget.pageTitle}')),
                 ],
               )
             ],

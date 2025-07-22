@@ -25,11 +25,17 @@ class MyRouterConfig {
             routes: [
               GoRoute(
                 path: 'allStaffs',
-                builder: (context, state) => AllStaffsView(),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: AllStaffsView(),
+                  key: state.pageKey,
+                ),
               ),
               GoRoute(
                 path: 'newStaff',
-                builder: (context, state) => NewStaffForm(),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: NewStaffForm(),
+                  key: state.pageKey,
+                ),
               ),
             ],
             // builder: (context, state) => StaffView(),
@@ -41,15 +47,24 @@ class MyRouterConfig {
             routes: [
               GoRoute(
                 path: 'allCustomers',
-                builder: (context, state) => AllCustomersView(),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: AllCustomersView(),
+                  key: state.pageKey,
+                ),
               ),
               GoRoute(
                 path: 'newCustomer',
-                builder: (context, state) => NewCustomerForm(),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: NewCustomerForm(),
+                  key: state.pageKey,
+                ),
               ),
               GoRoute(
                 path: 'viewCustomerRecord',
-                builder: (context, state) => CustomerRecord(),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: CustomerRecord(),
+                  key: state.pageKey,
+                ),
               ),
             ],
           ),
@@ -60,7 +75,10 @@ class MyRouterConfig {
             routes: [
               GoRoute(
                 path: 'allBank',
-                builder: (context, state) => AllBankView(),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: AllBankView(),
+                  key: state.pageKey,
+                ),
               ),
             ],
           ),
@@ -71,7 +89,10 @@ class MyRouterConfig {
             routes: [
               GoRoute(
                 path: 'allLoan',
-                builder: (context, state) => AllLoanView(),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: AllLoanView(),
+                  key: state.pageKey,
+                ),
               ),
             ],
           ),

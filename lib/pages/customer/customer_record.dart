@@ -1,5 +1,7 @@
 import 'package:demo/common/page/common_new_form_design.dart';
+import 'package:demo/common/page/common_table.dart';
 import 'package:demo/extensions/context_extension.dart';
+import 'package:demo/pages/bank/all_bank_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -13,6 +15,24 @@ class CustomerRecord extends StatefulWidget {
 }
 
 class _CustomerRecordState extends State<CustomerRecord> {
+  final columns = ['Draft Order', 'Date', 'Customer', 'Status', 'Total'];
+  final contentRows = [
+    Order(
+      customerName: 'Joker',
+      id: '#D1',
+      date: '1 minute ago',
+      status: 'Open',
+      amount: 'RM 1.23',
+    ),
+    Order(
+      customerName: '111 111',
+      id: '#D2',
+      date: '8:34PM',
+      status: 'Open',
+      amount: 'RM 12.23',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,9 +47,9 @@ class _CustomerRecordState extends State<CustomerRecord> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildCustomerOrderInfo(),
+              _buildLeftPanel(),
               const SizedBox(width: 10),
-              _buildCustomerInfo(),
+              _buildRightPanel(),
             ],
           ),
         ],
@@ -39,124 +59,169 @@ class _CustomerRecordState extends State<CustomerRecord> {
 
   TextStyle textStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
 
-  Widget _buildCustomerOrderInfo() {
-    return Expanded(
+  Widget _buildLeftPanel() {
+    return Flexible(
       flex: 3,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.grey.shade300,
-          ),
-          borderRadius: BorderRadius.circular(12),
+      child: Column(
+        children: [
+          _buildCustomerOrderInfo(),
+          const SizedBox(height: 10),
+          _buildCustomerOrderTable(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRightPanel() {
+    return Flexible(
+      flex: 2,
+      child: Column(
+        children: [_buildCustomerInfo()],
+      ),
+    );
+  }
+
+  Widget _buildCustomerOrderTable() {
+    return Container(
+      width: context.screenWidth,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 1, color: Colors.grey.shade300),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      child: CommonTable(
+        columns: columns.map((item) => DataColumn(label: Text(item))).toList(),
+        rows: contentRows.map((item) {
+          return DataRow(
+            color: WidgetStateColor.resolveWith((_) {
+              return const Color(0xFFF7F7F7);
+            }),
+            cells: [
+              DataCell(Text(item.id!)),
+              DataCell(Text(item.date!)),
+              DataCell(Text(item.customerName!)),
+              DataCell(Text(item.status!)),
+              DataCell(Text(item.amount!)),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildCustomerOrderInfo() {
+    return Container(
+      width: context.screenWidth,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.grey.shade300,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Last order placed', style: textStyle),
-            const SizedBox(height: 10),
-            Text("This customer hasn't placed any orders yet"),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                backgroundColor:
-                    WidgetStateColor.resolveWith((_) => Colors.white),
-                foregroundColor:
-                    WidgetStateColor.resolveWith((_) => Colors.black),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Last order placed', style: textStyle),
+          const SizedBox(height: 10),
+          Text("This customer hasn't placed any orders yet"),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Text('Create Order', style: textStyle),
+              backgroundColor:
+                  WidgetStateColor.resolveWith((_) => Colors.white),
+              foregroundColor:
+                  WidgetStateColor.resolveWith((_) => Colors.black),
             ),
-          ],
-        ),
+            child: Text('Create Order', style: textStyle),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildCustomerInfo() {
-    return Expanded(
-      flex: 2,
-      child: Container(
-        // width: context.screenWidth * 0.25,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.grey.shade300,
-          ),
-          borderRadius: BorderRadius.circular(12),
+    return Container(
+      // width: context.screenWidth * 0.25,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.grey.shade300,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Customer', style: textStyle),
-                  PopupMenuButton(
-                    color: Colors.white,
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Edit'),
-                      ),
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Delete'),
-                      ),
-                    ],
-                    icon: Icon(
-                      Icons.more_horiz,
-                      color: Colors.grey,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Customer', style: textStyle),
+                PopupMenuButton(
+                  color: Colors.white,
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Text('Edit'),
                     ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Text('Delete'),
+                    ),
+                  ],
+                  icon: Icon(
+                    Icons.more_horiz,
+                    color: Colors.grey,
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Text('Contact Information', style: textStyle),
-              const SizedBox(height: 20),
-              Text('email@email.com'),
-              const SizedBox(height: 10),
-              Text('Will receive notifications in English'),
-              const SizedBox(height: 20),
-              Text('Default Address', style: textStyle),
-              const SizedBox(height: 20),
-              Text('111 111'),
-              const SizedBox(height: 10),
-              Text('Malaysia'),
-              const SizedBox(height: 20),
-              Text('Marketing', style: textStyle),
-              const SizedBox(height: 20),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.crop_square_rounded, size: 10),
-                      const SizedBox(width: 10),
-                      Text('Email not subcribed'),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(Icons.crop_square_rounded, size: 10),
-                      const SizedBox(width: 10),
-                      Text('SMS not subcribed'),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Text('Staff details', style: textStyle),
-              const SizedBox(height: 20),
-              Text('Winson'),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text('Contact Information', style: textStyle),
+            const SizedBox(height: 20),
+            Text('email@email.com'),
+            const SizedBox(height: 10),
+            Text('Will receive notifications in English'),
+            const SizedBox(height: 20),
+            Text('Default Address', style: textStyle),
+            const SizedBox(height: 20),
+            Text('111 111'),
+            const SizedBox(height: 10),
+            Text('Malaysia'),
+            const SizedBox(height: 20),
+            Text('Marketing', style: textStyle),
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.crop_square_rounded, size: 10),
+                    const SizedBox(width: 10),
+                    Text('Email not subcribed'),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Icon(Icons.crop_square_rounded, size: 10),
+                    const SizedBox(width: 10),
+                    Text('SMS not subcribed'),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text('Staff details', style: textStyle),
+            const SizedBox(height: 20),
+            Text('Winson'),
+          ],
         ),
       ),
     );
@@ -262,4 +327,20 @@ class _CustomerRecordState extends State<CustomerRecord> {
       ],
     );
   }
+}
+
+class Order {
+  final String? id;
+  final String? date;
+  final String? customerName;
+  final String? status;
+  final String? amount;
+
+  Order({
+    this.id,
+    this.amount,
+    this.date,
+    this.customerName,
+    this.status,
+  });
 }

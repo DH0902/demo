@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-
 final List<Map<String, dynamic>> adminTabs = [
   {
-    'icon': Icons.shopping_cart,
-    'svgIcon': null,
+    'icon': null,
+    'svgIcon': 'assets/icons/employee_icon.svg',
     'label': 'Staff',
     'path': '/staff',
     'submenu': [
@@ -12,8 +10,8 @@ final List<Map<String, dynamic>> adminTabs = [
     ],
   },
   {
-    'icon': Icons.inventory,
-    'svgIcon': null,
+    'icon': null,
+    'svgIcon': 'assets/icons/customer_icon.svg',
     'label': 'Customer',
     'path': '/customer',
     'submenu': [
